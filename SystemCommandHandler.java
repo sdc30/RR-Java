@@ -8,12 +8,11 @@ import java.util.List;
 public class SystemCommandHandler {
 
 	private List<String> commandArgs;
-	private String adminPass;
+	private String adminPass, stdOutF, stdErrF;
 	private ThreadHandler inputHandler;
 	private ThreadHandler outputHandler;
 	
 	public SystemCommandHandler(final List<String> commandArgs) {
-		System.out.println("SystemCommandHandler\n");
 		if(commandArgs == null) throw new NullPointerException("Argument list cannot be null");
 		
 		this.commandArgs = commandArgs;
@@ -24,7 +23,6 @@ public class SystemCommandHandler {
 		int exit = -1;
 		
 		try {
-			System.out.println("execute()\n");
 			ProcessBuilder processBuilder = new ProcessBuilder(commandArgs);
 			final Process process = processBuilder.start();
 			
@@ -33,8 +31,8 @@ public class SystemCommandHandler {
 			InputStream stdIn = process.getInputStream();
 			InputStream stdErr = process.getErrorStream();
 			
-			ThreadHandler inputHandler = new ThreadHandler(stdIn, stdOut, adminPass);
-			ThreadHandler outputHandler = new ThreadHandler(stdErr);
+			inputHandler = new ThreadHandler(stdIn, stdOut, adminPass);
+			outputHandler = new ThreadHandler(stdErr);
 			
 			inputHandler.start();
 			outputHandler.start();
@@ -58,11 +56,11 @@ public class SystemCommandHandler {
 		}
 	}
 	
-	public StringBuilder getStdOut() {
+	public String getStdOut() {
 		return inputHandler.getOutputBuffer();
 	}
 	
-	public StringBuilder getStdErr() {
+	public String getStdErr() {
 		return outputHandler.getOutputBuffer();
 	}
 

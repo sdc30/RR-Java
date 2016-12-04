@@ -6,11 +6,11 @@ import java.io.*;
 
 
 public class ThreadHandler extends Thread {
-	private InputStream inputStream;
-	private String adminPass;
-	private OutputStream outputStream;
-	private PrintWriter printWriter;
-	private StringBuilder outputBuffer;
+	public InputStream inputStream;
+	public String adminPass;
+	public OutputStream outputStream;
+	public PrintWriter printWriter;
+	public StringBuilder outputBuffer;
 	private boolean sudoRequested;
 	
 	public ThreadHandler(InputStream inputStream) {
@@ -21,7 +21,6 @@ public class ThreadHandler extends Thread {
 	
 	public ThreadHandler(InputStream inputStream, OutputStream outputStream, String adminPass) {
 		this.outputBuffer = new StringBuilder();
-		this.sudoRequested = false;
 		this.inputStream = inputStream;
 		this.outputStream = outputStream;
 		this.printWriter = new PrintWriter(outputStream);
@@ -38,13 +37,11 @@ public class ThreadHandler extends Thread {
 		BufferedReader bufferedReader = null;
 		
 		try {
-			System.out.println("run()\n");
 
 			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 			String line = null;
 			
 			while( (line = bufferedReader.readLine()) != null) {
-				System.out.println(line + "\n");
 
 				outputBuffer.append(line + "\n");
 			}
@@ -56,7 +53,6 @@ public class ThreadHandler extends Thread {
 		} finally {
 			
 			try {
-				System.out.println("close\n");
 
 				bufferedReader.close();
 			} catch (IOException ioe) {
@@ -66,7 +62,7 @@ public class ThreadHandler extends Thread {
 		}
 	}
 	
-	public StringBuilder getOutputBuffer() {
-		return outputBuffer;
+	public String getOutputBuffer() {
+		return outputBuffer.toString();
 	}
 }

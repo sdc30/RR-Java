@@ -22,10 +22,10 @@ public class Handlers {
 		if(!GraphicsEnvironment.isHeadless()) {
 			System.out.println("Handler\n");
 			ProcessHandler processHandler = new ProcessHandler(args);
-			output += processHandler.stdErrF + processHandler.stdOutF;
+			output += processHandler.completeLog;
 	
 		} else {
-			System.out.println("Nada\n");
+			//System.out.println("Nada\n");
 		}
 		
 		

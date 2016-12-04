@@ -20,6 +20,7 @@ import java.awt.Choice;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.*;
 
 
 
@@ -138,18 +139,28 @@ public class MainFrame extends Frame{
 					Handlers h;
 					FileOperations fo;
 					
-					
-					//output += "\nRunning..." + fileDialog.getFile();
+
 					
 					try {
-/*
-						fo = new FileOperations();
-						String file = fileField.getText();
-						String madeFile = fo.makeFile(file, textArea.getText());
 
+						if(fileDialog.getFile() != null && !fileDialog.getFile().equals("Filename")){
+							
+							fo = new FileOperations();
+							String file = fileField.getText();
+							String madeFile = fo.makeFile(file, textArea.getText());
+							
+							output += "\nRunning... " + fileDialog.getFile();
+							
+							output += file + "\n";
+							output += madeFile + "\n";
+							
+							if(madeFile.equals("Error")) {
+								output += "File Exists Already\n";
+							}
+							
+						}
 						
-						output += file + "\n";
-						output += madeFile + "\n";
+
 						
 						String arg = runCommands[language.getSelectedIndex()];
 						String s;
@@ -159,21 +170,37 @@ public class MainFrame extends Frame{
 						else
 						   s = " ";
 						
-						String compileString = opargField.getText() + file;
-						String runString = arg + s + programName.getText();
+						String compileString = opargField.getText();
+						//String runString = arg + s + programName.getText();
 						
 						
 						System.out.println("Compile String: " + compileString);
-						System.out.println("Run String: " + runString);
+						//System.out.println("Run String: " + runString);
 						
+						List<String> args = new ArrayList<String>();
+						Pattern regex = Pattern.compile("[^\\s\"']+|\"([^\"]*)\"|'([^']*)'");;
+						Matcher regexMatcher = regex.matcher(compileString);
 						
+						while (regexMatcher.find()) {
+							if (regexMatcher.group(1) != null) {
+								args.add(regexMatcher.group(1));
+							}
+							else if (regexMatcher.group(2) != null) {
+								args.add(regexMatcher.group(2));
+							}
+							else {
+								args.add(regexMatcher.group());
+							}
+
+						}
+
 
 						
-						if(madeFile.equals("Error")) {
-							output += "File Exists Already\n";
-							
-						}
-						if(compileBox.getState()) {
+//						for(String qs: args) {
+//							System.out.println(qs);
+//						}
+
+	/*					if(compileBox.getState()) {
 							h = new Handlers(compileString);
 							output += h.output;
 						} else if(runBox.getState()) {
@@ -189,14 +216,13 @@ public class MainFrame extends Frame{
 		
 							
 						} else {}
-*/
-						List<String> n = new ArrayList<String>();
-						n.add("/bin/sh");
-						n.add("-c");
-						n.add("gcc");
-						h = new Handlers(n);
+	*/
+
+						h = new Handlers(args);
+						
+						
 						if(h.output != null)
-							output += h.output;
+							output += h.output + "\n";
 					} catch (Exception e) {
 						
 					}

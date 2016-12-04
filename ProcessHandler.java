@@ -7,19 +7,20 @@ import java.util.*;
 public class ProcessHandler {
 
 	private List<String> commandArgs;
-	public String stdErrF, stdOutF;
-
+	public String stdErrF, stdOutF, exited;
+	public String completeLog;
 	public ProcessHandler(List<String> commandArgs) throws IOException, InterruptedException {
 		try {
 			this.commandArgs = commandArgs;
-			System.out.println("ProcessHandler\n");
 			SystemCommandHandler systemCommandHandler = new SystemCommandHandler(commandArgs);
 			int result = systemCommandHandler.execute();
 			
-			System.out.println("The numeric result of the command was: " + result);
-			stdOutF = "StdOut: " + systemCommandHandler.getStdOut().toString();
-			stdErrF = "StdErr: " + systemCommandHandler.getStdErr().toString();
-
+			exited = "System Command exited with " + result + "\n";;
+			
+			stdOutF = "StdOut: " + systemCommandHandler.getStdOut() + "\n";
+			stdErrF = "StdErr: " + systemCommandHandler.getStdErr() + "\n";
+			
+			completeLog = exited + stdOutF + stdErrF;
 		
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
