@@ -7,6 +7,7 @@ JC=javac
 	
 CLASSES = \
 		Handlers.java \
+		ClassUtils.java \
 		SystemCommandHandler.java \
 		ThreadHandler.java \
 		ProcessHandler.java \
